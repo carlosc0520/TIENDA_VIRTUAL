@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\TIENDA_VIRTUAL.props" />
+</Project>

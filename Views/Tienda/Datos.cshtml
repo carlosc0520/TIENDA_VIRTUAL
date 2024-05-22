@@ -1,0 +1,75 @@
+@model TIENDA_VIRTUAL.Models.UsuarioListViewModel
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Mis datos</h1>
+            </div>
+        </div>
+
+        @* // crear formulario con los datos proveniente sy un boton editar *@
+        <div class="row">
+            <form class="row" method="post" action="/Tienda/MisDatos/Editar" onsubmit="return validateForm()">
+
+                <input type="hidden" id="ID" name="Usuario.ID" value="@Model.Usuario.ID" />
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="NOMBRES" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="NOMBRES" name="Usuario.NOMBRES"
+                        value="@Model.Usuario.NOMBRES" />
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.NOMBRES)</span>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="APELLIDOP" class="form-label ">Apellido Paterno</label>
+                    <input type="text" class="form-control" id="APELLIDOP" name="Usuario.APELLIDOP"
+                        value="@Model.Usuario.APELLIDOP" />
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOP)</span>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="APELLIDOM" class="form-label ">Apellido Materno</label>
+                    <input type="text" class="form-control" id="APELLIDOM" name="Usuario.APELLIDOM"
+                        value="@Model.Usuario.APELLIDOM" />
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOM)</span>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="USUARIO" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="USUARIO" name="Usuario.USUARIO"
+                        value="@Model.Usuario.USUARIO" />
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.USUARIO)</span>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="PASSWORD" class="form-label ">Contraseña</label>
+                    <input type="password" class="form-control" id="PASSWORD" name="Usuario.PASSWORD"
+                        value="@Model.Usuario.PASSWORD" />
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.PASSWORD)</span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label for="ROL" class="form-label">Rol</label>
+                    <select class="form-select" id="ROL" name="Usuario.ROL" value="@Model.Usuario.ROL">
+                        @if (Model.Usuario.ROL == "ADMINISTRADOR")
+                        {
+                            <option value="ADMINISTRADOR" selected>Administrador</option>
+                            <option value="USUARIO">Usuario</option>
+                        }
+                        else
+                        {
+                            <option value="ADMINISTRADOR">Administrador</option>
+                            <option value="USUARIO" selected>Usuario</option>
+                        }
+                    </select>
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.ROL)</span>
+                </div>
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>

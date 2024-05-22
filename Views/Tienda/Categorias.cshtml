@@ -1,0 +1,183 @@
+@model TIENDA_VIRTUAL.Models.CategoriaListViewModel
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Categorias</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="search-container">
+                <div class="col-md-11 col-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar categoria"
+                               aria-label="Buscar categoria"
+                               name="search-categoria"
+                               aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary btn-search-categoria" type="button" id="button-addon2">Buscar</button>
+                    </div>
+                </div>
+                <div class="col-md-2 col-12">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalAgregarCategoria">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table table-striped table-hover table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 @foreach (var categoria in Model.ListCategorias)
+                    {
+                        <tr>
+                            <th scope="row">@categoria.CategoriaId</th>
+                            <td>@categoria.DESCRIPCION</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-editar-categoria" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarCategoria">
+                                    Editar
+                                </button>
+                                <button type="button" class="btn btn-danger btn-eliminar-categoria">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+        
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalAgregarCategoria" class="modal fade" tabindex="-1" aria-labelledby="modalAgregarCategoriaLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarCategoriaLabel">Agregar categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Categorias/Agregar" onsubmit="return validateForm()">
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="CategoriaId" class="form-label">Código</label>
+                        <input type="text" disabled class="form-control" id="CategoriaId" name="Categoria.CategoriaId"
+                               value="@Model.Categoria.CategoriaId" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Categoria.CategoriaId)</span>
+                    </div>
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <label for="DESCRIPCION" class="form-label ">Descripción</label>
+                        <input type="text" class="form-control" id="DESCRIPCION" name="Categoria.DESCRIPCION"
+                               value="@Model.Categoria.DESCRIPCION" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Categoria.DESCRIPCION)</span>
+                    </div>
+
+  
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditarCategoria" class="modal fade" tabindex="-1" aria-labelledby="modalEditarCategoriaLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarCategoriaLabel">Editar categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Categorias/Editar" onsubmit="return validateForm()">
+                    <input type="hidden" id="CategoriaId" name="Categoria.CategoriaId" value="@Model.Categoria.CategoriaId" />
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="CategoriaId_LABEL" class="form-label">Código</label>
+                        <input type="text" disabled class="form-control" id="CategoriaId_LABEL" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Categoria.CategoriaId)</span>
+                    </div>
+
+                    <div class="col-12 col-md-8 mb-3">
+                        <label for="DESCRIPCION" class="form-label ">Descripción</label>
+                        <input type="text" class="form-control" id="DESCRIPCION" name="Categoria.DESCRIPCION"
+                               value="@Model.Categoria.DESCRIPCION" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Categoria.DESCRIPCION)</span>
+                    </div>
+
+
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let urlProducto = window.location.href;
+    if (urlProducto.includes("Tienda/Categorias/Agregar")) {
+        let modal = document.getElementById("modalAgregarCategoria");
+        let modalInstance = new bootstrap.Modal(modal);
+        modalInstance.show();
+    }
+
+    if (urlProducto.includes("Tienda/Categorias/Editar")) {
+        let modalE = document.getElementById("modalEditarCategoria");
+        let modalInstanceE = new bootstrap.Modal(modalE);
+        modalInstanceE.show();
+    }
+
+    $(".btn-editar-categoria").click(function () {
+        let tr = $(this).closest("tr");
+
+        $("#modalEditarCategoria").find("#CategoriaId_LABEL").val(tr.find("th").text());
+        $("#modalEditarCategoria").find("#CategoriaId").val(tr.find("th").text());
+        $("#modalEditarCategoria").find("#DESCRIPCION").val(tr.find("td").eq(0).text());
+    });
+
+    $(".btn-eliminar-categoria").click(function () {
+        let tr = $(this).closest("tr");
+        swal({
+            title: "¿Está seguro que desea eliminar la categoria?",
+            text: "Una vez eliminado, no podrá recuperar la información.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("La categoria ha sido eliminada.", {
+                        icon: "success",
+                    });
+                    window.location.href = "/Tienda/Categorias/Eliminar/" + tr.find("th").text();
+                } else {
+                    swal("La categoria no ha sido eliminada.");
+                }
+            });
+    });
+
+    $(".btn-search-categoria").click(function () {
+        let search = $(".search-container").find("input").val();
+        window.location.href = "/Tienda/Categorias/" + search;
+    });
+</script>

@@ -1,0 +1,260 @@
+﻿@model TIENDA_VIRTUAL.Models.UsuarioListViewModel
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Usuarios</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="search-container">
+                <div class="col-md-11 col-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar usuario"
+                               aria-label="Buscar usuario"
+                               name="search-usuario"
+                               aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary btn-search-usuario" type="button" id="button-addon2">Buscar</button>
+                    </div>
+                </div>
+                <div class="col-md-2 col-12">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalAgregarUsuario">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table table-striped table-hover table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col" class="d-none">Nombre</th>
+                        <th scope="col" class="d-none">Apellido P.</th>
+                        <th scope="col" class="d-none">Apellido M.</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">F. Creación</th>
+                        <th scope="col" class="d-none">Contrasena</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 @foreach (var usuario in Model.ListUsuarios)
+                    {
+                        <tr>
+                            <th scope="row">@usuario.ID</th>
+                            <td>@usuario.USUARIO</td>
+                            <td>@usuario.APELLIDOP @usuario.APELLIDOM @usuario.NOMBRES</td>
+                            <td class="d-none">@usuario.NOMBRES</td>
+                            <td class="d-none">@usuario.APELLIDOP</td>
+                            <td class="d-none">@usuario.APELLIDOM</td>
+                            <td>@usuario.ROL</td>
+                            <td>@usuario.FECHA</td>
+                            <td class="d-none">@usuario.PASSWORD</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-editar-usuario" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarUsuario">
+                                    Editar
+                                </button>
+                                <button type="button" class="btn btn-danger btn-eliminar-usuario">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+        
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalAgregarUsuario" class="modal fade" tabindex="-1" aria-labelledby="modalAgregarUsuarioLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarUsuarioLabel">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Usuarios/Agregar" onsubmit="return validateForm()">
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="NOMBRES" class="form-label">Nombres</label>
+                        <input type="text" class="form-control" id="NOMBRES" name="Usuario.NOMBRES"
+                               value="@Model.Usuario.NOMBRES" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.NOMBRES)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="APELLIDOP" class="form-label ">Apellido Paterno</label>
+                        <input type="text" class="form-control" id="APELLIDOP" name="Usuario.APELLIDOP"
+                               value="@Model.Usuario.APELLIDOP" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOP)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="APELLIDOM" class="form-label ">Apellido Materno</label>
+                        <input type="text" class="form-control" id="APELLIDOM" name="Usuario.APELLIDOM"
+                               value="@Model.Usuario.APELLIDOM" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOM)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="USUARIO" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="USUARIO" name="Usuario.USUARIO"
+                               value="@Model.Usuario.USUARIO" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.USUARIO)</span>
+                    </div>
+
+                 <div class="col-12 col-md-4 mb-3">
+                        <label for="PASSWORD" class="form-label ">Contraseña</label>
+                        <input type="password" class="form-control" id="PASSWORD" name="Usuario.PASSWORD"
+                               value="@Model.Usuario.PASSWORD" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.PASSWORD)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="ROL" class="form-label">Rol</label>
+                        <select class="form-select" id="ROL" name="Usuario.ROL">
+                            <option value="ADMINISTRADOR">Administrador</option>
+                            <option value="USUARIO">Usuario</option>
+                        </select>
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.ROL)</span>
+                    </div>
+  
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditarUsuario" class="modal fade" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Usuarios/Editar" onsubmit="return validateForm()">
+                    
+                    <input type="hidden" id="ID" name="Usuario.ID" value="@Model.Usuario.ID" />
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="NOMBRES" class="form-label">Nombres</label>
+                        <input type="text" class="form-control" id="NOMBRES" name="Usuario.NOMBRES"
+                               value="@Model.Usuario.NOMBRES" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.NOMBRES)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="APELLIDOP" class="form-label ">Apellido Paterno</label>
+                        <input type="text" class="form-control" id="APELLIDOP" name="Usuario.APELLIDOP"
+                               value="@Model.Usuario.APELLIDOP" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOP)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="APELLIDOM" class="form-label ">Apellido Materno</label>
+                        <input type="text" class="form-control" id="APELLIDOM" name="Usuario.APELLIDOM"
+                               value="@Model.Usuario.APELLIDOM" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.APELLIDOM)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="USUARIO" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="USUARIO" name="Usuario.USUARIO"
+                               value="@Model.Usuario.USUARIO" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.USUARIO)</span>
+                    </div>
+
+                    <div class="col-12 col-md-4 mb-3">
+                        <label for="PASSWORD" class="form-label ">Contraseña</label>
+                        <input type="password" class="form-control" id="PASSWORD" name="Usuario.PASSWORD"
+                               value="@Model.Usuario.PASSWORD" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.PASSWORD)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="ROL" class="form-label">Rol</label>
+                        <select class="form-select" id="ROL" name="Usuario.ROL">
+                            <option value="ADMINISTRADOR">Administrador</option>
+                            <option value="USUARIO">Usuario</option>
+                        </select>
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.Usuario.ROL)</span>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let urlProducto = window.location.href;
+    if (urlProducto.includes("Tienda/Usuarios/Agregar")) {
+        let modal = document.getElementById("modalAgregarUsuario");
+        let modalInstance = new bootstrap.Modal(modal);
+        modalInstance.show();
+    }
+
+    if (urlProducto.includes("Tienda/Usuarios/Editar")) {
+        let modalE = document.getElementById("modalEditarUsuario");
+        let modalInstanceE = new bootstrap.Modal(modalE);
+        modalInstanceE.show();
+    }
+
+    $(".btn-editar-usuario").click(function () {
+        let tr = $(this).closest("tr");
+
+        $("#modalEditarUsuario").find("#ID").val(tr.find("th").text(),);
+        $("#modalEditarUsuario").find("#NOMBRES").val(tr.find("td").eq(2).text());
+        $("#modalEditarUsuario").find("#APELLIDOP").val(tr.find("td").eq(3).text());
+        $("#modalEditarUsuario").find("#APELLIDOM").val(tr.find("td").eq(4).text());
+        $("#modalEditarUsuario").find("#USUARIO").val(tr.find("td").eq(0).text());
+        $("#modalEditarUsuario").find("#ROL").val(tr.find("td").eq(5).text());
+        $("#modalEditarUsuario").find("#CONTRASENA").val(tr.find("td").eq(7).text());
+
+    });
+
+    $(".btn-eliminar-usuario").click(function () {
+        let tr = $(this).closest("tr");
+        swal({
+            title: "¿Está seguro que desea eliminar el usuario?",
+            text: "Una vez eliminado, no podrá recuperar el usuario.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("El usuario ha sido eliminado.", {
+                        icon: "success",
+                    });
+                    window.location.href = "/Tienda/Usuarios/Eliminar/" + tr.find("th").text();
+                } else {
+                    swal("El usuario no ha sido eliminado.");
+                }
+            });
+    });
+
+    $(".btn-search-usuario").click(function () {
+        let search = $(".search-container").find("input").val();
+        window.location.href = "/Tienda/Usuarios/" + search;
+    });
+</script>

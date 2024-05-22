@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TIENDA_VIRTUAL</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    @* <link href="~/wwwroot/css/site.min.css" rel="stylesheet" /> *@
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TIENDA_VIRTUAL.styles.css" asp-append-version="true" />
+</head>
+
+<body class="row">
+    <div class="d-none nav-menu px-3 col-1 col-md-3 col-xl-2 bg-dark">
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <a href="/Tienda" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-5 d-none d-sm-inline">Menu</span>
+            </a>
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+            </ul>
+            <hr>
+            <div class="dropdown pb-4">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                    <span id="user-actual" class="d-none d-sm-inline mx-1">
+
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="contenedor-view">
+        <main role="main" class="pb-3 p-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+
+<script>
+    let url = window.location.href;
+    if (url.includes("token=")) {
+
+        let token = url.split("?")[1].split("=")[1];
+        localStorage.setItem("token", token);
+
+        let urlSinToken = url.split("?")[0];
+        window.location.href = urlSinToken;
+    };
+
+    if (url.includes("/Tienda")) {
+        document.querySelector(".nav-menu").classList.remove("d-none");
+        document.querySelector(".contenedor-view").classList.add("col-11", "col-md-9", "col-xl-10");
+    } else {
+        localStorage.removeItem("token");
+        document.querySelector(".nav-menu").classList.add("d-none");
+        document.querySelector(".contenedor-view").classList.add("col-11", "col-md-9", "col-xl-10");
+    }
+
+    let mappersURL = {
+        "ADMINISTRADOR": [
+            {
+                "url": "/Tienda",
+                "text": "Inicio",
+                "id": "Inicio"
+            },
+            {
+                "url": "/Tienda/Productos",
+                "text": "Productos",
+                "id": "Productos"
+            },
+            {
+                "url": "/Tienda/Odenes",
+                "text": "Ordenes",
+                "id": "Ordenes"
+            },
+            {
+                "url": "/Tienda/Categorias",
+                "text": "Categorias",
+                "id": "Categorias"
+            },
+            {
+                "url": "/Tienda/Usuarios",
+                "text": "Usuarios",
+                "id": "Usuarios"
+            },
+            {
+                "url": "/Tienda/MisDatos",
+                "text": "Mis Datos",
+                "id": "btn-prevent-MisDatos"
+            },
+        ],
+        "USUARIO": [
+            {
+                "url": "/Tienda",
+                "text": "Inicio",
+                "id": "Inicio"
+            },
+            {
+                "url": "/Usuario/Commprar",
+                "text": "Comprar",
+                "id": "Comprar"
+            },
+            {
+                "url": "/Usuario/Ordenes",
+                "text": "Ordenes",
+                "id": "Ordenes"
+            },
+            {
+                "url": "/Tienda/MisDatos",
+                "text": "Mis Datos",
+                "id": "btn-prevent-MisDatos"
+            }
+        ]
+    }
+
+    const cargarNav = () => {
+        let urlActual = window.location.href;
+        let token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "/";
+        }
+
+        token = JSON.parse(atob(token.split(".")[1]));
+
+        let mappers = mappersURL[token?.ROL || "USUARIO"];
+        let useractual = document.getElementById("user-actual");
+        useractual.innerHTML = token?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || "";
+        let menu = document.getElementById("menu");
+        menu.innerHTML = "";
+
+        mappers.forEach(mapper => {
+            let li = document.createElement("li");
+            li.classList.add("nav-item");
+
+            let a = document.createElement("a");
+            a.href = mapper.url;
+            a.classList.add("nav-link", "align-middle", "px-0");
+            a.id = mapper.id;
+            a.innerHTML = `<span class="ms-1 d-none d-sm-inline">${mapper.text}</span>`;
+
+            li.appendChild(a);
+            menu.appendChild(li);
+        });
+
+        let a = document.createElement("a");
+        a.href = "/";
+        a.classList.add("nav-link", "align-middle", "px-0");
+        a.innerHTML = `<span class="ms-1 d-none d-sm-inline">Salir</span>`;
+        menu.appendChild(a);
+
+        document.getElementById("btn-prevent-MisDatos").addEventListener("click", function (e) {
+            e.preventDefault();
+            let token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "/Tienda/Login";
+            }
+
+            token = JSON.parse(atob(token.split(".")[1]));
+
+            window.location.href = "/Tienda/MisDatos/" + token?.ID || 0;
+        });
+    }
+
+    if (localStorage.getItem("token")) {
+        cargarNav();
+    } else {
+        @* // validar que no este en la ruta path
+        if (!window.location.href.includes("/Tienda/Login")) {
+            window.location.href = "/Tienda/Login";
+        } *@
+    }
+
+</script>

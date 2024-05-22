@@ -1,0 +1,267 @@
+﻿@model TIENDA_VIRTUAL.Models.ProductoListViewModel
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Productos</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="search-container">
+                <div class="col-md-11 col-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar producto"
+                            aria-label="Buscar producto" name="search-producto" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary btn-search-producto" type="button"
+                            id="button-addon2">Buscar</button>
+                    </div>
+                </div>
+                <div class="col-md-2 col-12">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalAgregarProducto">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table table-striped table-hover table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col" class="d-none">ID_CAT</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* return View("Productos", productos); *@
+
+                    @foreach (var producto in Model.ListProductos)
+                    {
+                        <tr>
+                            <th scope="row">@producto.ID</th>
+                            <td>@producto.NOMBRE</td>
+                            <td>@producto.DETALLE</td>
+                            <td>@producto.PRECIO</td>
+                            <td>@producto.STOCK</td>
+                            <td>@producto.DESCRIPCION</td>
+                            <td class="d-none">@producto.CategoriaId</td>
+                            <td><img src="@producto.IMAGEN" alt="@producto.NOMBRE" width="50" height="50"></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-editar-producto" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditarProducto">Editar</button>
+                                <button type="button" class="btn btn-danger btn-eliminar-producto">
+                                    Eliminar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalAgregarProducto" class="modal fade" tabindex="-1" aria-labelledby="modalAgregarProductoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarProductoLabel">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Producto/Agregar" onsubmit="return validateForm()">
+                    <div class="col-12 mb-3">
+                        <label for="NOMBRE" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="NOMBRE" name="NuevoProducto.NOMBRE"
+                            value="@Model.NuevoProducto.NOMBRE" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.NOMBRE)</span>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="CategoriaId" class="form-label">Categoria</label>
+                        <select class="form-select" id="CategoriaId" name="NuevoProducto.CategoriaId">
+                            @foreach (var categoria in Model.ListCategoria)
+                            {
+                                <option value="@categoria.CategoriaId">@categoria.DESCRIPCION</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="PRECIO" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="PRECIO" name="NuevoProducto.PRECIO"
+                            value="@Model?.NuevoProducto?.PRECIO">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.PRECIO)</span>
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="STOCK" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="STOCK" name="NuevoProducto.STOCK"
+                            value="@Model?.NuevoProducto?.STOCK">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.STOCK)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="IMAGEN" class="form-label">Imagen</label>
+                        <input type="text" class="form-control" id="IMAGEN" name="NuevoProducto.IMAGEN"
+                            value="@Model?.NuevoProducto?.IMAGEN">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.IMAGEN)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="DETALLE" class="form-label">Detalle</label>
+                        <textarea class="form-control" id="DETALLE" name="NuevoProducto.DETALLE">
+                            @Model.NuevoProducto.DETALLE
+                        </textarea>
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.DETALLE)</span>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditarProducto" class="modal fade" tabindex="-1" aria-labelledby="modalEditarProductoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarProductoLabel">Editar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form class="row" method="post" action="/Tienda/Producto/Editar" onsubmit="return validateForm()">
+                    <div class="d-none col-12 mb-3">
+                        <label for="ID" class="form-label">ID</label>
+                        <input type="text" class="form-control" id="ID" name="NuevoProducto.ID"
+                            value="@Model?.NuevoProducto?.ID" readonly />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.ID)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="NOMBRE" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="NOMBRE" name="NuevoProducto.NOMBRE"
+                            value="@Model?.NuevoProducto?.NOMBRE" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.NOMBRE)</span>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="CategoriaId" class="form-label">Categoria</label>
+                        <select class="form-select" id="CategoriaId" name="NuevoProducto.CategoriaId">
+                            @foreach (var categoria in Model.ListCategoria)
+                            {
+                                @if (categoria.CategoriaId == Model.NuevoProducto.CategoriaId)
+                                {
+                                    <option value="@categoria.CategoriaId" selected>@categoria.DESCRIPCION</option>
+                                }
+                                else
+                                {
+                                    <option value="@categoria.CategoriaId">@categoria.DESCRIPCION</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="PRECIO" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="PRECIO" name="NuevoProducto.PRECIO"
+                            value="@Model?.NuevoProducto?.PRECIO">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.PRECIO)</span>
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="STOCK" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="STOCK" name="NuevoProducto.STOCK"
+                            value="@Model?.NuevoProducto?.STOCK">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.STOCK)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="IMAGEN" class="form-label">Imagen</label>
+                        <input type="text" class="form-control" id="IMAGEN" name="NuevoProducto.IMAGEN"
+                            value="@Model?.NuevoProducto?.IMAGEN">
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.IMAGEN)</span>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="DETALLE" class="form-label">Detalle</label>
+                        <textarea class="form-control" id="DETALLE" name="NuevoProducto.DETALLE">
+                            @Model.NuevoProducto.DETALLE
+                        </textarea>
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.NuevoProducto.DETALLE)</span>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let urlProducto = window.location.href;
+    if (urlProducto.includes("Tienda/Producto/Agregar")) {
+        let modal = document.getElementById("modalAgregarProducto");
+        let modalInstance = new bootstrap.Modal(modal);
+        modalInstance.show();
+    }
+
+    if (urlProducto.includes("Tienda/Producto/Editar")) {
+        let modalE = document.getElementById("modalEditarProducto");
+        let modalInstanceE = new bootstrap.Modal(modalE);
+        modalInstanceE.show();
+    }
+
+    $(".btn-editar-producto").click(function () {
+        let tr = $(this).closest("tr");
+        $("#modalEditarProducto").find("#ID").val(tr.find("th").text());
+        $("#modalEditarProducto").find("#NOMBRE").val(tr.find("td").eq(0).text());
+        $("#modalEditarProducto").find("#DETALLE").val(tr.find("td").eq(1).text());
+        $("#modalEditarProducto").find("#PRECIO").val(tr.find("td").eq(2).text());
+        $("#modalEditarProducto").find("#STOCK").val(tr.find("td").eq(3).text());
+        $("#modalEditarProducto").find("#CategoriaId").val(tr.find("td").eq(5).text());
+        $("#modalEditarProducto").find("#IMAGEN").val(tr.find("td").eq(6).find("img").attr("src"));
+    });
+
+    $(".btn-eliminar-producto").click(function () {
+        let tr = $(this).closest("tr");
+        swal({
+            title: "¿Está seguro que desea eliminar el producto?",
+            text: "Una vez eliminado, no podrá recuperar el producto.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("El producto ha sido eliminado.", {
+                        icon: "success",
+                    });
+                    window.location.href = "/Tienda/Producto/Eliminar/" + tr.find("th").text();
+                } else {
+                    swal("El producto no ha sido eliminado.");
+                }
+            });
+    });
+
+    $(".btn-search-producto").click(function () {
+        let search = $(".search-container").find("input").val();
+        window.location.href = "/Tienda/Productos/" + search;
+    });
+</script>

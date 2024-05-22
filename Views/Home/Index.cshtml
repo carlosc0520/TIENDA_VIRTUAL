@@ -1,0 +1,73 @@
+﻿@model TIENDA_VIRTUAL.Models.UsuarioModelLogin
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row mx-0 auth-wrapper">
+    <div class="d-none d-sm-flex col-sm-6 col-lg-7 align-items-center p-5">
+        <div class="align-items-start d-lg-flex flex-column offset-lg-2 text-white">
+            <img src="" class="mb-3">
+            <h1 classname="d-flex">Bienvenido 👋 Videojuegos</h1>
+            <p>
+                poner algo aqui si gustan sino quitarlo
+            </p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center col-sm-6 col-lg-5 align-items-center px-5 bg-white mx-auto">
+        <div class="form-wrapper w-75">
+            <div class="d-flex flex-column">
+                <div class="mb-4">
+
+                    <h3 class="font-medium mb-1">Login</h3>
+                    <p class="mb-2">Inicia sesión en tu cuenta</p>
+                </div>
+                <form class="mb-10" method="post" action="/Home/Ingresar" onsubmit="return validateForm()">
+                    <div class="form-group">
+                        <label for="USUARIO" class="">Usuario</label>
+                        <input id="USUARIO" name="USUARIO" type="text" class="form-control" value="@Model?.USUARIO" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.USUARIO)</span>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="PASSWORD" class="">Contraseña</label>
+                        <input id="PASSWORD" name="PASSWORD" type="password" class="form-control" />
+                        <span class="text-danger">@Html.ValidationMessageFor(m => m.PASSWORD)</span>
+                    </div>
+                    <div class="text-right">
+                        <a class="btn btn-link">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-3 border-0">
+                        Ingresar
+                    </button>
+                </form>
+                <div class="p-5 text-center text-xs">
+                    <span>
+                        Copyright © 2024
+                        <a href="https://tailwindcomponents.com/u/aji" rel="" target="_blank" title="aji">TIENDA VIRTUAL</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var usuario = document.getElementById("USUARIO").value;
+        var password = document.getElementById("PASSWORD").value;
+
+        if (usuario === "") {
+            alert("Por favor ingrese su usuario.");
+            return false;
+        }
+
+        if (password === "") {
+            alert("Por favor ingrese su contraseña.");
+            return false;
+        }
+
+        // Si todo es correcto, permite el envío del formulario.
+        return true;
+    }
+</script>

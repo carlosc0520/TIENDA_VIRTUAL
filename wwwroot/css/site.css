@@ -1,0 +1,128 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* // * LOGIN */
+a {
+  color: #a600ff;
+}
+
+a:hover {
+  color: #ff8585;
+}
+
+.auth-wrapper {
+  height: 80vh;
+  background-color: #ff8585;
+  background: linear-gradient(-45deg, #d5d8ff, #585192);
+  background-attachment: fixed;
+  background-size: cover;
+  height: calc(var(--vh, 1vh) * 80);
+}
+
+.btn:hover {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  transition-duration: 0.3s;
+  outline: none;
+  text-decoration: none;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+}
+
+.btn-primary {
+  background: #0011ff;
+  transition: all .5s ease-out;
+}
+
+.btn-primary:hover {
+  background: #7980fa;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show>.btn-primary.dropdown-toggle {
+  background-color: #ff8585;
+  border-color: #a600ff;
+}
+
+.btn-primary.focus,
+.btn-primary:focus {
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: #a600ff;
+  box-shadow: 0 0 0 0.2rem rgba(166, 0, 255, 0.25);
+}
+
+.text-xs {
+  font-size: .75rem;
+}
+
+
+/* // * NAV  */
+body {
+  background-color: #fbfbfb;
+}
+
+
+/* /* TABLE */
+
+.table-container {
+  width: 100%!important;
+  overflow-x: auto!important;
+  margin-bottom: 10px!important;
+}
+
+.responsive-table {
+  width: 100%!important;
+  border-collapse: collapse!important;
+}
+
+.responsive-table th,
+.responsive-table td {
+  padding: 8px!important;
+  text-align: left!important;
+  border: 1px solid #ddd!important;
+}
+
+.responsive-table thead {
+  background-color: #f2f2f2!important;
+}
+
+.responsive-table th {
+  white-space: nowrap!important;
+}
+
+/* //search-container */
+.search-container{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+  }
+
+  .search-container div:nth-child(2) {
+    display: flex;
+    justify-content:end;
+  }
+}
